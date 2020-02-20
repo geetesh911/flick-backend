@@ -1,0 +1,4 @@
+{
+  "mongoURI": "mongodb://geetesh911:geetesh911@flick-shard-00-00-8hj46.mongodb.net:27017,flick-shard-00-01-8hj46.mongodb.net:27017,flick-shard-00-02-8hj46.mongodb.net:27017/test?ssl=true&replicaSet=flick-shard-0&authSource=admin&retryWrites=true&w=majority",
+  "jwtSecret": "geetesh911"
+}
