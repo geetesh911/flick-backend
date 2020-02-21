@@ -101,7 +101,7 @@ router.get("/", async (req, res) => {
     });
     data.results.forEach(url => {
       if (url.poster_path)
-        url.poster_path = `https://image.tmdb.org/t/p/w250_and_h141_face${url.poster_path}`;
+        url.poster_path = `https://image.tmdb.org/t/p/w500_and_h282_face${url.poster_path}`;
       return url.poster;
     });
 
