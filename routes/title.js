@@ -57,7 +57,12 @@ router.get("/", async (req, res) => {
       `https://api.themoviedb.org/3/search/${type}?api_key=c21a2d47027f8fc50ec163849848819b&language=en-US&query=${searchResult.title}&page=1&include_adult=false`
     );
     const tmdbData = await tmdbSearch.json();
-    let tmdbID = tmdbData.results[0].id;
+    let tmdbID = null;
+    searchResult.external_ids.forEach(id => {
+      if (id.provider === "tmdb") {
+        tmdbID = id.external_id;
+      }
+    });
 
     for (let i = 0; i < tmdbData.results.length; i++) {
       let releaseYear = "";
