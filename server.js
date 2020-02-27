@@ -14,7 +14,7 @@ app.use((req, res, next) => {
    next(err);*/
 
   // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  // res.setHeader("Access-Control-Allow-Origin", "*");
 
   // Request methods you wish to allow
   res.setHeader(
