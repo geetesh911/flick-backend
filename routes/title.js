@@ -120,17 +120,12 @@ router.get("/", async (req, res) => {
     }
     let video = null;
 
-    console.log(ip);
-    console.log(type);
     if (type === "movie") {
-      console.log("m");
-
       video = await axios.get(
         `https://vsrequest.video/request.php?key=X3a8auPsuzVwAMXA&secret_key=ehylz9b4kan88qotd3r97zaqo6tcaz&video_id=${tmdbID}&tmdb=1&ip=${ip}`
       );
       video = stringify(video.data);
     } else {
-      console.log("t");
       video = await axios.get(
         `https://vsrequest.video/request.php?key=X3a8auPsuzVwAMXA&secret_key=ehylz9b4kan88qotd3r97zaqo6tcaz&video_id=${tmdbID}&tmdb=1&tv=1&s=1&ip=${ip}`
       );
@@ -141,7 +136,6 @@ router.get("/", async (req, res) => {
 
     res.send(searchResult);
   } catch (err) {
-    console.log(err);
     res.status(500).send("Server Error");
   }
 });
