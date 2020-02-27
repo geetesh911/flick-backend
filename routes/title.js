@@ -109,30 +109,32 @@ router.get("/", async (req, res) => {
 
     searchResult.recommendation = data;
 
-    let ip = "";
+    // let ip = "";
 
-    try {
-      let ipAddress = await axios.get(`https://v6.ident.me/.json`);
-      ip = ipAddress.data.address;
-    } catch (error) {
-      let ipAddress = await axios.get("http://ip-api.com/json/");
-      ip = ipAddress.data.query;
-    }
-    let video = null;
+    // try {
+    //   let ipAddress = await axios.get(`https://v6.ident.me/.json`);
+    //   ip = ipAddress.data.address;
+    // } catch (error) {
+    //   let ipAddress = await axios.get("http://ip-api.com/json/");
+    //   ip = ipAddress.data.query;
+    // }
+    // let video = null;
 
-    if (type === "movie") {
-      video = await axios.get(
-        `https://vsrequest.video/request.php?key=X3a8auPsuzVwAMXA&secret_key=ehylz9b4kan88qotd3r97zaqo6tcaz&video_id=${tmdbID}&tmdb=1&ip=${ip}`
-      );
-      video = stringify(video.data);
-    } else {
-      video = await axios.get(
-        `https://vsrequest.video/request.php?key=X3a8auPsuzVwAMXA&secret_key=ehylz9b4kan88qotd3r97zaqo6tcaz&video_id=${tmdbID}&tmdb=1&tv=1&s=1&ip=${ip}`
-      );
-      video = stringify(video.data);
-    }
+    // if (type === "movie") {
+    //   video = await axios.get(
+    //     `https://vsrequest.video/request.php?key=X3a8auPsuzVwAMXA&secret_key=ehylz9b4kan88qotd3r97zaqo6tcaz&video_id=${tmdbID}&tmdb=1&ip=${ip}`
+    //   );
+    //   video = stringify(video.data);
+    // } else {
+    //   video = await axios.get(
+    //     `https://vsrequest.video/request.php?key=X3a8auPsuzVwAMXA&secret_key=ehylz9b4kan88qotd3r97zaqo6tcaz&video_id=${tmdbID}&tmdb=1&tv=1&s=1&ip=${ip}`
+    //   );
+    //   video = stringify(video.data);
+    // }
 
-    searchResult.videoSource = video.split('"')[1];
+    // searchResult.videoSource = video.split('"')[1];
+
+    searchResult.tmdbID = tmdbID;
 
     res.send(searchResult);
   } catch (err) {
