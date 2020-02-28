@@ -1,6 +1,8 @@
 const express = require("express");
 const JustWatch = require("./index");
 const fetch = require("node-fetch");
+const axios = require("axios");
+const stringify = require("json-stringify-safe");
 
 const router = express.Router();
 
@@ -51,6 +53,18 @@ router.get("/", async (req, res) => {
     });
 
     searchResult.cast = cast;
+
+    // let episodes = [];
+    const ip = req.query.ipAdd;
+
+    video = await axios.get(
+      `https://vsrequest.video/request.php?key=X3a8auPsuzVwAMXA&secret_key=ehylz9b4kan88qotd3r97zaqo6tcaz&video_id=${tmdbID}&tmdb=1&tv=1&s=${searchResult.season_number}&ip=${ip}`
+    );
+    video = stringify(video.data);
+    video = video.split('"')[1];
+    searchResult.videoSource = video;
+
+    searchResult.tmdbID = tmdbID;
 
     res.send(searchResult);
   } catch (err) {
