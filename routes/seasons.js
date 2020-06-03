@@ -56,7 +56,7 @@ router.get("/", async (req, res) => {
     searchResult.cast = cast;
 
     // let episodes = [];
-    const ip = await getIP();
+    const ip = req.query.ipAdd;
 
     video = await axios.get(
       `https://vsrequest.video/request.php?key=X3a8auPsuzVwAMXA&secret_key=ehylz9b4kan88qotd3r97zaqo6tcaz&video_id=${tmdbID}&tmdb=1&tv=1&s=${searchResult.season_number}&ip=${ip}`

@@ -112,7 +112,7 @@ router.get("/", async (req, res) => {
     searchResult.recommendation = data;
 
     let video = null;
-    const ip = await getIP();
+    const ip = req.query.ipAdd;
 
     if (type === "movie") {
       video = await axios.get(
