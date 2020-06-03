@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const justwatch = new JustWatch();
+    const justwatch = new JustWatch({ locale: "en_IN" });
 
     const searchResult = await justwatch.getProviders();
     res.send(searchResult);

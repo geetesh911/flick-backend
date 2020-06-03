@@ -3,13 +3,12 @@ const JustWatch = require("./index");
 const fetch = require("node-fetch");
 const axios = require("axios");
 const stringify = require("json-stringify-safe");
-const getIP = require("../utils/getIP");
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const justwatch = new JustWatch();
+    const justwatch = new JustWatch({ locale: "en_IN" });
 
     const seasonID = req.query.season_id;
     const searchResult = await justwatch.getSeason(seasonID);
@@ -42,18 +41,22 @@ router.get("/", async (req, res) => {
       }
     });
 
-    const tmdbCast = await fetch(
-      `https://api.themoviedb.org/3/tv/${tmdbID}/season/${seasonNo}/credits?api_key=c21a2d47027f8fc50ec163849848819b&language=en-US`
-    );
+    try {
+      const tmdbCast = await fetch(
+        `https://api.themoviedb.org/3/tv/${tmdbID}/season/${seasonNo}/credits?api_key=c21a2d47027f8fc50ec163849848819b&language=en-US`
+      );
 
-    const cast = await tmdbCast.json();
+      const cast = await tmdbCast.json();
 
-    cast.cast.forEach((person) => {
-      if (person.profile_path)
-        person.profile_path = `https://image.tmdb.org/t/p/w138_and_h175_face${person.profile_path}`;
-    });
+      cast.cast.forEach((person) => {
+        if (person.profile_path)
+          person.profile_path = `https://image.tmdb.org/t/p/w138_and_h175_face${person.profile_path}`;
+      });
 
-    searchResult.cast = cast;
+      searchResult.cast = cast;
+    } catch (error) {
+      console.log(error.message);
+    }
 
     // let episodes = [];
     const ip = req.query.ipAdd;

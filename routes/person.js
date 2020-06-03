@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const justwatch = new JustWatch();
+    const justwatch = new JustWatch({ locale: "en_IN" });
 
     const personID = req.query.person_id;
 
