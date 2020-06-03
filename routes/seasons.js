@@ -3,6 +3,7 @@ const JustWatch = require("./index");
 const fetch = require("node-fetch");
 const axios = require("axios");
 const stringify = require("json-stringify-safe");
+const getIP = require("../utils/getIP");
 
 const router = express.Router();
 
@@ -23,7 +24,7 @@ router.get("/", async (req, res) => {
 
     // correct backdrops urls
     if (searchResult.backdrops) {
-      searchResult.backdrops.forEach(img => {
+      searchResult.backdrops.forEach((img) => {
         img.backdrop_url = `https://images.justwatch.com${img.backdrop_url}`;
         splittedBackdropURL = img.backdrop_url.split("/");
         splittedBackdropURL[splittedBackdropURL.length - 1] = "s1440";
@@ -34,7 +35,7 @@ router.get("/", async (req, res) => {
     let tmdbID = null;
     let seasonNo = null;
 
-    searchResult.external_ids.forEach(id => {
+    searchResult.external_ids.forEach((id) => {
       if (id.provider === "tmdb") {
         tmdbID = id.external_id.split(":")[0];
         seasonNo = id.external_id.split(":")[1];
@@ -47,7 +48,7 @@ router.get("/", async (req, res) => {
 
     const cast = await tmdbCast.json();
 
-    cast.cast.forEach(person => {
+    cast.cast.forEach((person) => {
       if (person.profile_path)
         person.profile_path = `https://image.tmdb.org/t/p/w138_and_h175_face${person.profile_path}`;
     });
@@ -55,7 +56,7 @@ router.get("/", async (req, res) => {
     searchResult.cast = cast;
 
     // let episodes = [];
-    const ip = req.query.ipAdd;
+    const ip = await getIP();
 
     video = await axios.get(
       `https://vsrequest.video/request.php?key=X3a8auPsuzVwAMXA&secret_key=ehylz9b4kan88qotd3r97zaqo6tcaz&video_id=${tmdbID}&tmdb=1&tv=1&s=${searchResult.season_number}&ip=${ip}`

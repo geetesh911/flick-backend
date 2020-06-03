@@ -3,6 +3,7 @@ const JustWatch = require("./index");
 const fetch = require("node-fetch");
 const axios = require("axios");
 const stringify = require("json-stringify-safe");
+const getIP = require("../utils/getIP");
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.get("/", async (req, res) => {
       contentType,
       parseInt(titleID)
     );
+    // console.log(searchResult);
 
     // correct poster urls
     if (searchResult.poster) {
@@ -27,7 +29,7 @@ router.get("/", async (req, res) => {
 
     // correct backdrops urls
     if (searchResult.backdrops) {
-      searchResult.backdrops.forEach(img => {
+      searchResult.backdrops.forEach((img) => {
         img.backdrop_url = `https://images.justwatch.com${img.backdrop_url}`;
         splittedBackdropURL = img.backdrop_url.split("/");
         splittedBackdropURL[splittedBackdropURL.length - 1] = "s1440";
@@ -37,7 +39,7 @@ router.get("/", async (req, res) => {
 
     // correct seasons poster urls
     if (searchResult.seasons) {
-      searchResult.seasons.forEach(img => {
+      searchResult.seasons.forEach((img) => {
         img.poster = `https://images.justwatch.com${img.poster}`;
         splittedBackdropURL = img.poster.split("/");
         splittedBackdropURL[splittedBackdropURL.length - 1] = "s166";
@@ -48,7 +50,7 @@ router.get("/", async (req, res) => {
     // correct clip url
     if (searchResult.clips) {
       searchResult.clips.forEach(
-        url =>
+        (url) =>
           (url.external_id = `https://www.youtube.com/embed/${url.external_id}?controls=1`)
       );
     }
@@ -60,7 +62,7 @@ router.get("/", async (req, res) => {
     );
     const tmdbData = await tmdbSearch.json();
     let tmdbID = null;
-    searchResult.external_ids.forEach(id => {
+    searchResult.external_ids.forEach((id) => {
       if (id.provider === "tmdb") {
         tmdbID = id.external_id;
       }
@@ -85,7 +87,7 @@ router.get("/", async (req, res) => {
 
     const cast = await tmdbCast.json();
 
-    cast.cast.forEach(person => {
+    cast.cast.forEach((person) => {
       if (person.profile_path)
         person.profile_path = `https://image.tmdb.org/t/p/w138_and_h175_face${person.profile_path}`;
     });
@@ -98,10 +100,10 @@ router.get("/", async (req, res) => {
 
     const data = await response.json();
 
-    data.results.forEach(url => {
+    data.results.forEach((url) => {
       return (url.backdrop_path = `https://image.tmdb.org/t/p/w250_and_h141_face${url.backdrop_path}`);
     });
-    data.results.forEach(url => {
+    data.results.forEach((url) => {
       if (url.poster_path)
         url.poster_path = `https://image.tmdb.org/t/p/w500_and_h282_face${url.poster_path}`;
       return url.poster;
@@ -109,17 +111,8 @@ router.get("/", async (req, res) => {
 
     searchResult.recommendation = data;
 
-    // let ip = "";
-
-    // try {
-    //   let ipAddress = await axios.get(`https://v6.ident.me/.json`);
-    //   ip = ipAddress.data.address;
-    // } catch (error) {
-    //   let ipAddress = await axios.get("http://ip-api.com/json/");
-    //   ip = ipAddress.data.query;
-    // }
     let video = null;
-    const ip = req.query.ipAdd;
+    const ip = await getIP();
 
     if (type === "movie") {
       video = await axios.get(
