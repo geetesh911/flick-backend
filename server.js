@@ -50,6 +50,7 @@ app.use("/api/person", require("./routes/person"));
 app.use("/api/genres", require("./routes/genres"));
 app.use("/api/providers", require("./routes/providers"));
 app.use("/api/watchlist", require("./routes/watchlist"));
+app.use("/api/start", require("./routes/start"));
 
 const PORT = process.env.PORT || 5000;
 
