@@ -104,18 +104,17 @@ router.get("/", async (req, res) => {
       searchResult.cast = cast;
 
       const response = await fetch(
-        `https://api.themoviedb.org/3/${type}/${tmdbID}/recommendations?api_key=c21a2d47027f8fc50ec163849848819b&language=en-US&page=1`
+        `https://apis.justwatch.com/content/titles/en_IN/recommendations?jw_entity_ids=${searchResult.jw_entity_id}&body=%7B%22page_size%22:12,%22page%22:1%7D&similar_model_type=CONTENT`
       );
-
       const data = await response.json();
 
-      data.results.forEach((url) => {
-        return (url.backdrop_path = `https://image.tmdb.org/t/p/w250_and_h141_face${url.backdrop_path}`);
-      });
-      data.results.forEach((url) => {
-        if (url.poster_path)
-          url.poster_path = `https://image.tmdb.org/t/p/w500_and_h282_face${url.poster_path}`;
-        return url.poster;
+      data.items.forEach((d) => {
+        if (d.poster) {
+          d.poster = `https://images.justwatch.com${d.poster}`;
+          let splittedPosterURL = d.poster.split("/");
+          splittedPosterURL[splittedPosterURL.length - 1] = "s592";
+          d.poster = splittedPosterURL.join("/");
+        }
       });
 
       searchResult.recommendation = data;

@@ -17,7 +17,7 @@ class JustWatch {
         hostname: API_DOMAIN,
         path: "/content" + endpoint,
         method: method,
-        headers: {}
+        headers: {},
       };
       let body = null;
       // add query string if necessary
@@ -31,10 +31,10 @@ class JustWatch {
       }
 
       // send request
-      const req = https.request(reqData, res => {
+      const req = https.request(reqData, (res) => {
         // build response
         let buffers = [];
-        res.on("data", chunk => {
+        res.on("data", (chunk) => {
           buffers.push(chunk);
         });
 
@@ -70,7 +70,7 @@ class JustWatch {
       });
 
       // handle error
-      req.on("error", error => {
+      req.on("error", (error) => {
         reject(error);
       });
 
@@ -104,7 +104,7 @@ class JustWatch {
       cinema_release: null,
       query: null,
       page: null,
-      page_size: null
+      page_size: null,
     };
     const paramKeys = Object.keys(params);
     // validate options
